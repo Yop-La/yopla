@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Ma page d'accueil{% endblock %}
+
+
+{% block css %}{% static 'search_engine/css/home.css' %}{% endblock %}
+
+
+{% block content %}
+
+<div class="container">
+
+  <div class="row">
+
+    <div class="col-lg-4">
+
+      <form data-search-url="{% url 'search' %}">
+        <div class="form-group">
+          <label for="requete">Tapez votre requête</label>
+          <input class="form-control" name = "requete" id="requete" placeholder="communist party">
+        </div>
+
+        <div class="form-group">
+          <label for="search-option">Search option</label>
+          <select class="form-control" id="search-option" name="search-option">
+            <option value='search_phrase'>Avec search_phrase</option>
+            <option value='binaire'>Index matriciel binaire</option>
+            <option value='tf'>Index matriciel tf</option>
+            <option value='tf_idf'>Index matriciel tf_idf</option>
+          </select>
+        </div>
+
+        <button type="button" id='search' class="btn btn-primary">Submit</button>
+      </form>
+
+    </div>
+
+    <div class="col-lg-8"><h3>Résultats de la recherche (10 premiers textes)</h3><br>
+      <table id="resTable" style="width: 100%;" class="table"></table>
+
+    </div>
+
+  </div>
+
+  {% endblock %}
+
+
+  {% block javascript %}
+
+
+  <script>
+    $( document ).ready(function() {
+      console.log("dedans");
+      $("#search").click(function () {
+        var form = $(this).closest("form");
+        console.log(form.attr("data-search-url"));
+        console.log(form.serialize());
+        jQuery.ajax({
+          url: form.attr("data-search-url"),
+          data: form.serialize(),
+          dataType: 'json',
+          success: function (data) {
+
+            jQuery("#resTable tr").remove();
+            texts = data.res
+            texts = texts.reverse()
+            if(texts.length == 0){
+              var table = document.getElementById("resTable");
+              var row = table.insertRow(0);
+              var cell1 = row.insertCell(0);
+              cell1.innerHTML = 'Aucun résultat correspondant à votre requête';
+            }
+            texts.forEach(function(text){
+              var table = document.getElementById("resTable");
+              var row = table.insertRow(0);
+              var cell1 = row.insertCell(0);
+              cell1.innerHTML = text;
+            })
+            console.log(data);
+
+          }
+        });
+
+      });
+    });
+  </script>
+
+  {% endblock %}
