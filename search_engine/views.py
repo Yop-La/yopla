@@ -95,11 +95,7 @@ def search_mat(mat_index,query):
     if(len(query) == 0):
         return([])
     query = np.array(query)
-    print(len(query))
-    print(sum(query))
     score_res = list(mat_index.dot(query))
-    print(len(score_res))
-    print(sum(score_res))
     return(score_res)
 
 # matrice avec comme métrique absence ou présence du mot
@@ -112,8 +108,19 @@ index_mat_tf_idf = scipy.sparse.load_npz(root_folder + '/static/search_engine/in
 res = search_mat(index_mat_tf,'air france')
 
 def home(request):
-    return (render(request, 'search_engine/home.html', {'date': datetime.now()}));
 
+    url = request.build_absolute_uri()
+    notebook1 = url + 'notebook1'
+    notebook2 = url + 'notebook2'
+
+    return (render(request, 'search_engine/home.html', {'notebook1': notebook1,'notebook2': notebook2}));
+
+def notebook1(request):
+
+    return (render(request, 'search_engine/building_index.html', {}));
+
+def notebook2(request):
+    return (render(request, 'search_engine/building_index_matriciel.html', {}));
 
 
 
