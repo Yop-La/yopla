@@ -112,16 +112,18 @@ def home(request):
     url = request.build_absolute_uri()
     notebook1 = url + 'notebook1'
     notebook2 = url + 'notebook2'
+    notebook3 = url + 'notebook3'
 
-    return (render(request, 'search_engine/home.html', {'notebook1': notebook1,'notebook2': notebook2}));
+    return (render(request, 'search_engine/home.html', {'notebook1': notebook1,'notebook2': notebook2,'notebook3': notebook3}));
 
 def notebook1(request):
-
     return (render(request, 'search_engine/building_index.html', {}));
 
 def notebook2(request):
     return (render(request, 'search_engine/building_index_matriciel.html', {}));
 
+def notebook3(request):
+    return (render(request, 'search_engine/answering_queries.html', {}));
 
 
 def get_pertient_results(n,mat_index,query):
